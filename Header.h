@@ -3,35 +3,50 @@
 #include <iostream>
 #include <locale>
 using namespace std;
-class Node
+class Array
 {
-	int piece;
-	class Node* next;
-	friend class List;
-};
-class List
-{
-	Node* head;
-	Node* last;
-	Node* current;
-	int count = 0;
+	int* array;
+	int length;
+
 public:
-	List() { head = NULL; last = head; current = head; }
-	~List()
+	Array(int arrlength) // constructor
 	{
-		cout << "The destructor has finished deleting the specified elements." << endl;
+		array = new int[arrlength];
+		length = arrlength;
 	}
-	void push_front(int num);
-	void insert(int, int);
-	void push_back(int num);
-	void print_to_console();
-	void pop_back();
-	void remove(int);
-	int at(int position);
-	void set(int, int);
-	void pop_front();
-	size_t get_size();
-	bool isEmpty();
-	void clear();
-	bool contains(List l2);
+	~Array() // destructor
+	{
+		delete[] array;
+		cout << "\ndestructor has finished his work" << endl;
+	}
+	void filling(int, int);
+	int getValue(int);
+	void BogoSort();
+	void shuffle();
+	int correct();
+	void quicksort(int, int);
+	void BinarySearch(int);
+	void InsertionSort();
+	void randfilling();
+};
+class Char_Array
+{
+	char* array;
+	int length;
+
+public:
+	Char_Array(int arrlength) // constructor
+	{
+		array = new char[arrlength];
+		length = arrlength;
+	}
+	~Char_Array() // destructor
+	{
+		delete[] array;
+		cout << "\ndestructor has finished his work" << endl;
+	}
+	void CountingSort();
+	void filling(int, char);
+	char getValue(int index);
+	void randfilling();
 };

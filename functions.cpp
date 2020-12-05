@@ -2,322 +2,154 @@
 #include <iomanip>
 #include <iostream>
 #include <locale>
+#include <cstdlib>
 using namespace std;
-//adding to the top of the list
-void List::push_front(int num)
+void Array::filling(int index,int value) //Filling of the array
 {
-	Node* elem = new Node();
-	elem->piece = num;
-	count++;
-		if (head == NULL)
+	array[index] = value;
+}
+int Array::getValue(int index) //Getting the value of array
+{
+	return array[index]; 
+}
+int Array::correct() // Part of the silly sort
+{
+	int lengthcopy = length;
+	while (--lengthcopy > 0)
+		if (array[lengthcopy - 1] > array[lengthcopy])
+			return 0;
+	return 1;
+}
+void Array::shuffle() // Part of the silly sort
+{
+	for (int i = 0; i < length; ++i)
+		swap(array[i], array[(rand() % length)]);
+}
+void Array::BogoSort() //Silly sort
+{
+	while (!correct())
+		shuffle();
+}
+void Array::quicksort(int first, int last) //QuickSort
+{
+	int mid, count;
+	int f = first, l = last;
+	mid = array[(f + l) / 2];
+	do
+	{
+		while (array[f] < mid) f++;
+		while (array[l] > mid) l--;
+		if (f <= l)
 		{
-			elem->next = NULL;
-			head = elem;
-			last = head;
+			count = array[f];
+			array[f] = array[l];
+			array[l] = count;
+			f++;
+			l--;
+		}
+	} while (f < l);
+	if (first < l) quicksort(first, l);
+	if (f < last) quicksort(f, last);
+}
+void Array::BinarySearch(int key) //BinarySearch
+{
+	bool flag = false;
+	int l = 0;
+	int r = length - 1;
+	int mid;
+	while ((l <= r) && (flag != true))
+	{
+		mid = (l + r) / 2;
+		if (array[mid] == key) flag = true;
+		if (array[mid] > key) r = mid - 1;
+		else l = mid + 1;
+	}
+	if (flag) cout << "Index of element " << key << " in array is equal to: " << mid <<endl;
+	else cout << "Sorry, but there is no such an element in array" <<endl;
+}
+void Char_Array::CountingSort() //Counting sort
+{
+	int* output = new int[length];
+	int* count = new int[length];
+	int max = 0;
+	int tmp = 0;
+	int tmp2 = 0;
+	int tmp3 = 0;
+	for (int i = 1; i < length; i++)
+	{
+		tmp = array[i] - '0';
+		if (tmp > max)
+		{
+			max = tmp;
+		}
+	}
+	for (int i = 0; i <= max; ++i)
+	{
+		count[i] = 0;
+	}
+	for (int i = 0; i < length; i++)
+	{
+		count[array[i] - '0']++;
+	}
+	for (int i = 1; i <= max; i++)
+	{
+		count[i] += count[i - 1];
+	}
+	for (int i = length - 1; i >= 0; i--)
+	{
+		output[count[array[i] - '0'] - 1] = array[i] - '0';
+		count[array[i] - '0']--;
+	}
+	for (int i = 0; i < length; i++)
+	{
+		array[i] = output[i] + '0';
+	}
+}
+void Array::InsertionSort() //InsertionSort
+{
+	int key = 0, temp = 0;
+	for (int i = 0; i < length - 1; i++)
+	{
+		key = i + 1;
+		temp = array[key];
+		for (int j = i + 1; j > 0; j--)
+		{
+			if (temp < array[j - 1])
+			{
+				array[j] = array[j - 1];
+				key = j - 1;
+			}
+		}
+		array[key] = temp;
+	}
+}
+void Array::randfilling() //Random filling of the array
+{
+	int temp;
+	for (int i = 0; i < length; i++)
+	{
+		temp = rand() % 2;
+		if (temp == 0)
+		{
+			array[i] = (rand() % 10)*(-1);
 		}
 		else
-		{
-			elem->next = head;
-			head = elem;
-		}
-}
-//adding to the end of the list
-void List::push_back(int num)
-{
-	Node* elem = new Node();
-	elem->piece = num;
-	count++;
-	if (head == NULL)
-	{
-		elem->next = NULL;
-		head = elem;
-		last = head;
-	}
-	else
-	{
-		current = head;
-		while (current->next != NULL)
-		{
-			current = current->next;
-		}
-		elem->next = NULL;
-		current->next = elem;
-		last = current;
+			array[i] = rand() % 10;
 	}
 }
-//output list items to the console
-void List::print_to_console()
+void Char_Array::filling(int index, char value) //Filling of the array
 {
-	current = head;
-	cout << "|";
-	while (1)
-	{
-		if (count == 0)
-		{
-			cout << "NULL|";
-			break;
-		}
-		cout << current->piece << "|";
-		current = current->next;
-		if (current == NULL)
-		{
-			cout << "\n";
-			break;
-		}
-	}
+	array[index] = value + '0';
 }
-//deleting the first element
-void List::pop_front()
+char Char_Array::getValue(int index) //Getting the value of array
 {
-	if (count == 0)
-		return;
-	current = head;
-	head = head->next;
-	current->next = NULL;
-	delete current;
-	count--;
+	return array[index];
 }
-//deleting the last element
-void List::pop_back()
+void Char_Array::randfilling() // Random filling of the char array
 {
-	if (count == 0)
-		return;
-	last = head;
-	current = head;
-	while (last->next != NULL)
+	int temp;
+	for (int i = 0; i < length; i++)
 	{
-		last = last->next;
+		array[i] = rand() % 10 + '0';
 	}
-	if (current != last)
-	{
-		while (current->next != last)
-		{
-			current = current->next;
-		}
-		last->next = NULL;
-		delete last;
-		current->next = NULL;
-		last = current;
-	}
-	else
-	{
-		delete current;
-	}
-	count--;
-}
-//adding an item by index
-void List::insert(int index, int num)
-{
-	Node* elem = new Node();
-	elem->piece = num;
-	count++;
-	current = head;
-	if (index == 0)
-	{
-		if (head == NULL)
-		{
-			elem->next = NULL;
-			head = elem;
-			last = head;
-		}
-		else
-		{
-			elem->next = head;
-			head = elem;
-		}
-	}
-	else
-	{
-		for (int i = 0; i < index - 1; i++)
-		{
-			current = current->next;
-		}
-		elem->next = current->next;
-		current->next = elem;
-	}
-}
-//getting an item by index
-int List::at(int index)
-{
-	current = head;
-	for (int i = 0; i < index; i++)
-	{
-		current = current->next;
-	}
-	return current->piece;
-}
-//deleting an item by index
-void List::remove(int index)
-{
-	if (count > 0)
-	{
-		current = head;
-		if (index == 0)
-		{
-			current = head;
-			head = head->next;
-			current->next = NULL;
-			delete current;
-		}
-		else if (index == count-1)
-		{
-			if (count == 0)
-				return;
-			last = head;
-			current = head;
-			while (last->next != NULL)
-			{
-				last = last->next;
-			}
-			if (current != last)
-			{
-				while (current->next != last)
-				{
-					current = current->next;
-				}
-				last->next = NULL;
-				delete last;
-				current->next = NULL;
-				last = current;
-			}
-			else
-			{
-				delete current;
-			}
-		}
-		else
-		{
-			for (int i = 0; i < index; i++)
-			{
-				current = current->next;
-			}
-			last = current->next;
-			current->next = last;
-			delete last;
-		}
-		count--;
-	}
-}
-//getting the list size
-size_t List::get_size()
-{
-	return count;
-}
-//deleting all list items
-void List::clear()
-{
-	for (int j = 0; j < count; j++)
-	{
-		current = head;
-		head = head->next;
-		current->next = NULL;
-		delete current;
-	}
-	count = 0;
-}
-//replacing an element by index with the passed element
-void List::set(int index, int value)
-{
-	current = head;
-	for (int i = 0; i < index; i++)
-	{
-		current = current->next;
-	}
-	Node* elem = new Node();
-	elem->piece = value;
-	current->piece = elem->piece;
-	elem->next = NULL;
-	delete elem;
-}
-//checking for the content of the list2 in the list1
-bool List::contains(List list2)
-{
-	current = head;
-	list2.current = list2.head;
-	if (current == NULL)
-	{
-		return 1;
-	}
-	if (list2.current == NULL)
-	{
-		return 1;
-	}
-	while (true)
-	{
-		if (count > list2.count || count == list2.count)
-		{
-			while (true)
-			{
-				if (current == NULL)
-				{
-					return 0;
-				}
-				if (current->piece == list2.current->piece)
-				{
-					if (current->piece != list2.current->piece)
-					{
-						return 0;
-					}
-					while (current != NULL)
-					{
-						if (list2.current == NULL)
-						{
-							return 1;
-						}
-						if (current->piece != list2.current->piece)
-						{
-							return 0;
-						}
-						current = current->next;
-						list2.current = list2.current->next;
-					}
-					return 1;
-				}
-				else
-				{
-					current = current->next;
-				}
-			}
-		}
-		else
-		{
-			while (true)
-			{
-				if (list2.current == NULL)
-				{
-					return 0;
-				}
-				if (list2.current->piece == current->piece)
-				{
-					if (list2.current->piece != current->piece)
-					{
-						return 0;
-					}
-					while (list2.current != NULL)
-					{
-						if (current == NULL)
-						{
-							return 1;
-						}
-						if (list2.current->piece != current->piece)
-						{
-							return 0;
-						}
-						current = current->next;
-						list2.current = list2.current->next;
-					}
-					return 1;
-				}
-				else
-				{
-					list2.current = list2.current->next;
-				}
-			}
-		}
-	}
-}
-//checking if the list is empty
-bool List::isEmpty()
-{
-	return (count != 0);
 }

@@ -2,31 +2,82 @@
 #include <iomanip>
 #include <iostream>
 #include <locale>
+#include <chrono>
+#include <cstdlib>
 using namespace std;
-void main()
+int main()
 {
-	List* list1 = new List;
-	List* list2 = new List;
+	/*for (int i = 0; i < 10; i++)
+	{
+		int arrlength = 100000;
+		int value;
+		Array arr(arrlength);
+		arr.randfilling();
+		chrono::system_clock::time_point start = chrono::system_clock::now();
+		arr.InsertionSort();
+		chrono::system_clock::time_point end = chrono::system_clock::now();
+		chrono::duration<double> sec = end - start;
+		cout << "the execution time of the function is " << sec.count() << " seconds" << endl;
+		cout << "=====================================\n";
+	}*/
 	while (true)
 	{
 	start:
+		int arrlength;
+		int value;
+		cout << "Fill in the size of array" << endl;
+		cin >> arrlength;
+		cin.clear();
+		cin.ignore(cin.rdbuf()->in_avail());
+		if (arrlength < 1)
+		{
+			cout << "Wrong array length" << endl; //Exception
+			goto start;
+		}
+		Array arr(arrlength); 
+		cout << "Choose method of the filling (1 - random filling, 2 - manually filling):" << endl;
+		int choose;
+		cin >> choose;
+		cin.clear();
+		cin.ignore(cin.rdbuf()->in_avail());
+		if (choose == 1)
+		{
+			arr.randfilling();
+		}
+		else if (choose == 2)
+		{
+			cout << "Fill in the array" << endl;
+			for (int i = 0; i < arrlength; i++)
+			{
+				cin >> value;
+				arr.filling(i, value);
+			}
+		}
+		else
+		{
+			cout << "Wrong method\n"; //Exception
+			goto start;
+		}
 		cout << "=====================================\n";
-		cout << "Choose action (write 1 to 14 number):\n";
-		cout << "1. adding to the top of the list\n"
-			<< "2. adding to the end of the list\n"
-			<< "3. deleting the first element\n"
-			<< "4. deleting the last element\n"
-			<< "5. adding an item by index\n"
-			<< "6. getting an item by index\n"
-			<< "7. deleting an item by index\n"
-			<< "8. getting the list size\n"
-			<< "9. output list items to the console\n"
-			<< "10. deleting all list items\n"
-			<< "11. replacing an element by index with the passed element\n"
-			<< "12. checking if the list is empty\n"
-			<< "13. checking for the content of the list2 in the list1\n"
-			<< "14. close the program\n";
-		int issue, list, value, index;
+		cout << "Array after filing:" << endl;
+		for (int i = 0; i < arrlength; i++)
+		{
+			cout << arr.getValue(i) << " ";
+		}
+		cout << endl;
+		cout << "=====================================\n";
+	choosing:
+		cout << "-------------------------------------\n";
+		cout << "Choose action (write 1 to 7 number):\n";
+		cout << "1. BinarySearch (int)\n"
+			<< "2. QuickSort (int)\n"
+			<< "3. InsertionSort (int)\n"
+			<< "4. BogoSort (int)\n"
+			<< "5. CountingSort (char)\n"
+			<< "6. Refill the array\n"
+			<< "7. Close the program\n";
+		cout << "-------------------------------------\n";
+		int issue;
 		cin >> issue;
 		cin.clear();
 		cin.ignore(cin.rdbuf()->in_avail());
@@ -34,376 +85,141 @@ void main()
 		{
 		case 1:
 		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
+			cout << "Enter the searching number\n";
+			int key;
+			cin >> key;
 			cin.clear();
 			cin.ignore(cin.rdbuf()->in_avail());
-			cout << "Enter value of the new element: \n";
-			cin >> value;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if (list == 1)
-			{
-				list1->push_front(value);
-				cout << "List 1 after change: ";
-				list1->print_to_console();
-				cout << endl;
-			}
-			else if (list == 2)
-			{
-				list2->push_front(value);
-				cout << "List 2 after change: ";
-				list2->print_to_console();
-				cout << endl;
-			}
-			else 
-			{
-				cout << "Wrong list.\n\n";
-			}
-			goto start;
+			arr.BinarySearch(key);
+			goto choosing;
 		}
 		case 2:
 		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			cout << "Enter value of the new element: \n";
-			cin >> value;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if (list == 1)
+			int first = 0;
+			int last = arrlength - 1;
+			chrono::system_clock::time_point start = chrono::system_clock::now();
+			arr.quicksort(first, last);
+			chrono::system_clock::time_point end = chrono::system_clock::now();
+			chrono::duration<double> sec = end - start;
+			cout << "the execution time of the function is " << sec.count() << " seconds" << endl;
+			cout << "=====================================\n";
+			cout << "Array after QuickSort:" << endl;
+			for (int i = 0; i < arrlength; i++)
 			{
-				list1->push_back(value);
-				cout << "List 1 after change: ";
-				list1->print_to_console();
-				cout << endl;
+				cout << arr.getValue(i) << " ";
 			}
-			else if (list == 2)
-			{
-				list2->push_back(value);
-				cout << "List 2 after change: ";
-				list2->print_to_console();
-				cout << endl;
-			}
-			else
-			{
-				cout << "Wrong list.\n\n";
-			}
-			goto start;
+			cout << endl;
+			cout << "=====================================\n";
+			goto choosing;
 		}
 		case 3:
 		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if (list == 1)
+			chrono::system_clock::time_point start = chrono::system_clock::now();
+			arr.InsertionSort();
+			chrono::system_clock::time_point end = chrono::system_clock::now();
+			chrono::duration<double> sec = end - start;
+			cout << "the execution time of the function is " << sec.count() << " seconds" << endl;
+			cout << "=====================================\n";
+			cout << "Array after InsertionSort:" << endl;
+			for (int i = 0; i < arrlength; i++)
 			{
-				list1->pop_front();
-				cout << "List 1 after change: ";
-				list1->print_to_console();
-				cout << endl;
+				cout << arr.getValue(i) << " ";
 			}
-			else if (list == 2)
-			{
-				list2->pop_front();
-				cout << "List 2 after change: ";
-				list2->print_to_console();
-				cout << endl;
-			}
-			else
-			{
-				cout << "Wrong list.\n\n";
-			}
-			goto start;
+			cout << endl;
+			cout << "=====================================\n";
+			goto choosing;
 		}
 		case 4:
 		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if (list == 1)
+			chrono::system_clock::time_point start = chrono::system_clock::now();
+			arr.BogoSort();
+			chrono::system_clock::time_point end = chrono::system_clock::now();
+			chrono::duration<double> sec = end - start;
+			cout << "the execution time of the function is " << sec.count() << " seconds" << endl;
+			cout << "=====================================\n";
+			cout << "Array after BogoSort:" << endl;
+			for (int i = 0; i < arrlength; i++)
 			{
-				list1->pop_back();
-				cout << "List 1 after change: ";
-				list1->print_to_console();
-				cout << endl;
+				cout << arr.getValue(i) << " ";
 			}
-			else if (list == 2)
-			{
-				list2->pop_back();
-				cout << "List 2 after change: ";
-				list2->print_to_console();
-				cout << endl;
-			}
-			else
-			{
-				cout << "Wrong list.\n\n";
-			}
-			goto start;
+			cout << endl;
+			cout << "=====================================\n";
+			goto choosing;
 		}
 		case 5:
 		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
+		again:
+			cout << "Fill in the size of char array" << endl;
+			cin >> arrlength;
 			cin.clear();
 			cin.ignore(cin.rdbuf()->in_avail());
-			cout << "Enter value of the new element: \n";
-			cin >> value;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			cout << "Enter index of element: \n";
-			cin >> index;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if (index < 0)
+			if (arrlength < 2)
 			{
-				cout << "Wrong index.\n\n";
-				goto start;
+				cout << "Wrong array length" << endl; //Exception
+				goto again;
 			}
-			if ((list == 1) && (index < list1->get_size()))
+			Char_Array arrC(arrlength);
+			cout << "Choose method of the filling (1 - random filling, 2 - manually filling):" << endl;
+			int choose;
+			cin >> choose;
+			cin.clear();
+			cin.ignore(cin.rdbuf()->in_avail());
+			if (choose == 1)
 			{
-				list1->insert(index, value);
-				cout << "List 1 after change: ";
-				list1->print_to_console();
-				cout << endl;
+				arrC.randfilling();
 			}
-			else if ((list == 2) && (index < list2->get_size()))
+			else if (choose == 2)
 			{
-				list2->insert(index, value);
-				cout << "List 2 after change: ";
-				list2->print_to_console();
-				cout << endl;
+				cout << "Fill in the char array" << endl;
+				for (int i = 0; i < arrlength; i++)
+				{
+					cin >> value;
+					arrC.filling(i, value);
+				}
 			}
 			else
 			{
-				cout << "Wrong list or index.\n\n";
+				cout << "Wrong method\n"; //Exception
+				goto again;
 			}
-			goto start;
+			cout << "=====================================\n";
+			cout << "Char array after filing:" << endl;
+			for (int i = 0; i < arrlength; i++)
+			{
+				cout << arrC.getValue(i) << " ";
+			}
+			cout << endl;
+			cout << "=====================================\n";
+			chrono::system_clock::time_point start = chrono::system_clock::now();
+			arrC.CountingSort();
+			chrono::system_clock::time_point end = chrono::system_clock::now();
+			chrono::duration<double> sec = end - start;
+			cout << "the execution time of the function is " << sec.count() << " seconds" << endl;
+			cout << "=====================================\n";
+			cout << "Array after CountingSort:" << endl;
+			for (int i = 0; i < arrlength; i++)
+			{
+				cout << arrC.getValue(i) << " ";
+			}
+			cout << endl;
+			cout << "=====================================\n";
+			goto choosing;
 		}
 		case 6:
 		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			cout << "Enter index of element: \n";
-			cin >> index;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if ((list == 1) && (index < list1->get_size()) && list1->get_size() > 0 && index >-1)
-			{
-				cout << "Element with choosen index: " << list1->at(index);
-				cout << endl;
-			}
-			else if ((list == 2) && (index < list2->get_size()) && list2->get_size()>0 && index > -1)
-			{
-				cout << "Element with choosen index: " << list2->at(index);
-				cout << endl;
-			}
-			else
-			{
-				cout << "Wrong list or index.\n\n";
-			}
 			goto start;
 		}
 		case 7:
 		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			cout << "Enter index of element: \n";
-			cin >> index;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if ((list == 1) && (index < list1->get_size()))
-			{
-				list1->remove(index);
-				cout << "List 1 after change: ";
-				list1->print_to_console();
-				cout << endl;
-			}
-			else if ((list == 2) && (index < list2->get_size()))
-			{
-				list2->remove(index);
-				cout << "List 2 after change: ";
-				list2->print_to_console();
-				cout << endl;
-			}
-			else
-			{
-				cout << "Wrong list or index.\n\n";
-			}
-			goto start;
-		}
-		case 8:
-		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if (list == 1)
-			{
-				cout << "List 1 size: " << list1->get_size();
-				cout << endl;
-			}
-			else if (list == 2)
-			{
-				cout << "List 2 size: " << list2->get_size();
-				cout << endl;
-			}
-			else
-			{
-				cout << "Wrong list.\n\n";
-			}
-			goto start;
-		}
-		case 9:
-		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if (list == 1)
-			{
-				cout << "List 1: ";
-				list1->print_to_console();
-				cout << endl;
-			}
-			else if (list == 2)
-			{
-				cout << "List 2: ";
-				list2->print_to_console();
-				cout << endl;
-			}
-			else
-			{
-				cout << "Wrong list.\n";
-			}
-			goto start;
-		}
-		case 10:
-		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if (list == 1)
-			{
-				list1->clear();
-				cout << "List 1 was cleared.\n";
-			}
-			else if (list == 2)
-			{
-				list2->clear();
-				cout << "List 2 was cleared.\n";
-			}
-			else
-			{
-				cout << "Wrong list.\n\n";
-			}
-			goto start;
-		}
-		case 11:
-		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			cout << "Enter value of the new element: \n";
-			cin >> value;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			cout << "Enter index of element for change: \n";
-			cin >> index;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if ((list == 1) && (index < list1->get_size()))
-			{
-				list1->set(index, value);
-				cout << "List 1 after change: ";
-				list1->print_to_console();
-				cout << endl;
-			}
-			else if ((list == 2) && (index < list2->get_size()))
-			{
-				list2->set(index, value);
-				cout << "List 2 after change: ";
-				list2->print_to_console();
-				cout << endl;
-			}
-			else
-			{
-				cout << "Wrong list.\n\n";
-			}
-			goto start;
-		}
-		case 12:
-		{
-			cout << "Choose List to work with (1 or 2): \n";
-			cin >> list;
-			cin.clear();
-			cin.ignore(cin.rdbuf()->in_avail());
-			if (list == 1)
-			{
-				if (list1->isEmpty() == true)
-				{
-					cout << "List 1 is not empty.";
-					cout << endl;
-				}
-				else
-				{
-					cout << "List 1 is empty.";
-					cout << endl;
-				}
-			}
-			else if (list == 2)
-			{
-				if (list2->isEmpty() == true)
-				{
-					cout << "List 2 is not empty.";
-					cout << endl;
-				}
-				else
-				{
-					cout << "List 2 is empty.";
-					cout << endl;
-				}
-			}
-			else
-			{
-				cout << "Wrong list.\n";
-			}
-			goto start;
-		}
-		case 13:
-		{
-			if (list1->contains(*list2) == 1)
-			{
-				cout << "List 1 contains List2.";
-				cout << endl;
-			}
-			else
-			{
-				cout << "List 1 doesn`t contain List2.";
-				cout << endl;
-			}
-			goto start;
-		}
-		case 14:
-		{
-			delete list1;
-			delete list2;
-			exit(0);
+			goto end;
 		}
 		default:
 		{
-			cout << "Error. Enter the number 1 to 14" << endl;
-			goto start;
-		}
+			cout << "Error. Enter the number 1 to 7" << endl; //Exception
+			goto choosing;
 		}
 		}
 	}
+end:
+	cout;
+}

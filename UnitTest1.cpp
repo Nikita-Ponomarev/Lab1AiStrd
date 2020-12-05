@@ -1,138 +1,136 @@
 ﻿#include "pch.h"
 #include "CppUnitTest.h"
 #include <stdexcept>
-#include "../Lab1aistrd/Header.h"
-#include "/Users/Никита/source/repos/Lab1aistrd/Lab1aistrd/functions.cpp"
+#include "../Aistrd2Lab/Header.h"
+#include "C:\Users\Никита\source\repos\Aistrd2Lab\Aistrd2Lab\functions.cpp"
+
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace UnitTest1
+namespace UnitTest2
 {
-	TEST_CLASS(HeaderTests)
+	TEST_CLASS(UnitTest2)
 	{
 	public:
-		List* lst;
-		List* lst2;
-		//before each test
+
+		int arrlength;
+
 		TEST_METHOD_INITIALIZE(setUp)
 		{
-			lst = new List();
-			lst2 = new List();
+			arrlength = 10;
 		}
-		//after each test
+
 		TEST_METHOD_CLEANUP(cleanUP)
 		{
-			delete lst;
-		}
-
-		TEST_METHOD(correct_push_back)
-		{
-			lst->push_back(3);
-			lst2->push_back(1);
-			Assert::AreEqual(lst->get_size(), lst2->get_size());
-		}
-
-		TEST_METHOD(correct_push_front)
-		{
-			lst->push_front(3);
-			lst2->push_front(1);
-			Assert::AreEqual(lst->get_size(), lst2->get_size());
-		}
-
-		TEST_METHOD(correct_pop_back)
-		{
-			lst->push_back(1);
-			lst->push_back(2);
-			lst->push_back(3);
-			lst2->push_back(1);
-			lst2->push_back(2);
-			lst->pop_back();
-			Assert::AreEqual(lst->get_size(), lst2->get_size());
-		}
-
-		TEST_METHOD(correct_pop_front)
-		{
-			lst->push_back(1);
-			lst->push_back(2);
-			lst->push_back(3);
-			lst2->push_back(1);
-			lst2->push_back(2);
-			lst->pop_front();
-			Assert::AreEqual(lst->get_size(), lst2->get_size());
-		}
-
-		TEST_METHOD(correct_insert)
-		{
-			size_t size = 3;
-			lst->push_front(1);
-			lst->push_front(3);
-			lst->insert(1, 2);
-			Assert::AreEqual(lst->get_size(), size);
-		}
-
-		TEST_METHOD(correct_index_at)
-		{
-			lst->push_back(1);
-			lst->push_back(2);
-			lst->push_back(3);
-			Assert::AreEqual(lst->at(1), 2);
-		}
-
-		TEST_METHOD(correct_remove)
-		{
-			size_t size = 1;
-			lst->push_front(1);
-			lst->push_front(3);
-			lst->remove(1);
-			Assert::AreEqual(lst->get_size(), size);
-		}
-
-		TEST_METHOD(correct_get_size)
-		{
-			lst->push_back(1);
-			lst->push_back(2);
-			lst->push_back(3);
-			size_t b = 3;
-			Assert::AreEqual(lst->get_size(), b);
-		}
-
-		TEST_METHOD(correct_clear)
-		{
-			size_t size = 0;
-			lst->push_front(12);
-			lst->push_front(11);
-			lst->push_front(10);
-			lst->clear();
-			Assert::AreEqual(lst->get_size(), size);
-		}
-
-		TEST_METHOD(correct_set)
-		{
-			size_t size = 3;
-			lst->push_front(12);
-			lst->push_front(11);
-			lst->push_front(10);
-			lst->set(1, 3);
-			Assert::AreEqual(lst->get_size(), size);
-		}
-
-		TEST_METHOD(correct_isEmpty)
-		{
-			lst->push_front(12);
-			lst->push_front(11);
-			lst->push_front(10);
-			Assert::AreEqual(lst->isEmpty(), true);
 
 		}
 
-		TEST_METHOD(correct_contains)
+		TEST_METHOD(quick_sort)
 		{
-			lst->push_back(1);
-			lst->push_back(2);
-			lst2->push_back(1);
-			lst2->push_back(2);
-			lst2->push_back(3);
-			Assert::AreEqual(lst->contains(*lst2), true);
+			Array test(arrlength);
+			int test_fill[10] = { 1,2,3,4,5,6,7,8,9,10 };
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				test.filling(i, test_fill[i]);
+			}
+
+			Array arr(arrlength);
+			int test_arr[10] = { 7,3,2,1,5,4,6,8,10,9 };
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				arr.filling(i, test_arr[i]);
+			}
+
+			arr.quicksort(0, 9);
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				Assert::AreEqual(arr.getValue(i), test.getValue(i));
+			}
+
+		}
+
+		TEST_METHOD(insertion_sort)
+		{
+			Array test(arrlength);
+			int test_fill[10] = { 1,2,3,4,5,6,7,8,9,10 };
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				test.filling(i, test_fill[i]);
+			}
+
+			Array arr(arrlength);
+			int test_arr[10] = { 7,3,2,1,5,4,6,8,10,9 };
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				arr.filling(i, test_arr[i]);
+			}
+
+			arr.InsertionSort();
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				Assert::AreEqual(arr.getValue(i), test.getValue(i));
+			}
+
+		}
+
+		TEST_METHOD(bogo_sort)
+		{
+			Array test(arrlength);
+			int test_fill[10] = { 1,2,3,4,5,6,7,8,9,10 };
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				test.filling(i, test_fill[i]);
+			}
+
+			Array arr(arrlength);
+			int test_arr[10] = { 7,3,2,1,5,4,6,8,10,9 };
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				arr.filling(i, test_arr[i]);
+			}
+
+			arr.BogoSort();
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				Assert::AreEqual(arr.getValue(i), test.getValue(i));
+			}
+
+		}
+
+		TEST_METHOD(counting_sort)
+		{
+			Char_Array test(arrlength);
+			int test_fill[10] = { 1,2,3,4,5,6,7,8,9,10 };
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				test.filling(i, test_fill[i] + '0');
+			}
+
+			Char_Array arr(arrlength);
+			int test_arr[10] = { 7,3,2,1,5,4,6,8,10,9 };
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				arr.filling(i, test_arr[i] + '0');
+			}
+
+			arr.CountingSort();
+
+			for (int i = 0; i < arrlength; i++)
+			{
+				Assert::AreEqual(arr.getValue(i), test.getValue(i));
+			}
+
 		}
 
 	};
